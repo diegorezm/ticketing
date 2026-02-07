@@ -1,0 +1,81 @@
+<Layouts.flash_group flash={@flash} />
+
+<div class="max-w-5xl mx-auto py-20 px-6">
+  <header class="max-w-3xl">
+    <h1 class="text-6xl font-black tracking-tight leading-none mb-6">
+      Ship faster. <br />
+      <span class="text-primary italic">Waste less time.</span>
+    </h1>
+    <p class="text-xl text-base-content/70 leading-relaxed mb-10 max-w-2xl">
+      A lightweight issue tracker for teams who find Jira too slow.
+      Built on Elixir for instant updates, real-time collaboration, and zero lag.
+    </p>
+
+    <div class="flex flex-wrap gap-4">
+      <.link navigate={~p"/users/register"} class="btn btn-primary btn-md">
+        Create Workspace
+      </.link>
+      <.link navigate={~p"/users/log-in"} class="btn btn-outline btn-md">
+        Sign in to existing
+      </.link>
+    </div>
+  </header>
+
+  <section class="mt-24">
+    <div class="flex items-center justify-between mb-8 border-b border-base-200 pb-4">
+      <h2 class="text-sm font-bold uppercase tracking-widest opacity-60">
+        Engineered for Performance
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12">
+      <div class="flex gap-4">
+        <span class="text-primary font-mono font-bold">01</span>
+        <div>
+          <h3 class="font-bold">Real-time Sync</h3>
+          <p class="text-sm text-base-content/60 mt-1">
+            Every ticket update is pushed instantly to every team member via Phoenix Channels. No refreshing, ever.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <span class="text-primary font-mono font-bold">02</span>
+        <div>
+          <h3 class="font-bold">Keyboard-First</h3>
+          <p class="text-sm text-base-content/60 mt-1">
+            Navigate, create, and assign tickets without your hands ever leaving the home row.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <span class="text-primary font-mono font-bold">03</span>
+        <div>
+          <h3 class="font-bold">Sub-second Latency</h3>
+          <p class="text-sm text-base-content/60 mt-1">
+            Optimized database queries and Elixir concurrency mean your dashboard stays fast, even with 10k+ tickets.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <span class="text-primary font-mono font-bold">04</span>
+        <div>
+          <h3 class="font-bold">Minimalist UI</h3>
+          <p class="text-sm text-base-content/60 mt-1">
+            No complex configuration screens. Just your work, front and center.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="mt-32 pt-8 border-t border-base-200 flex justify-between items-center opacity-50 text-xs">
+    <p>© 2026 Ticketing Platform</p>
+    <div class="flex items-center gap-2">
+      <div class="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+      <span>Systems Operational</span>
+    </div>
+  </footer>
+</div>

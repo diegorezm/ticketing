@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="retro">
+<html lang="en" data-theme="cupcake">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,6 +12,55 @@
     </script>
   </head>
   <body>
+    <header>
+      <div class="navbar bg-base-100 border-b border-base-200">
+        <div class="flex-1">
+          <.link navigate={~p"/"} class="btn btn-ghost text-xl normal-case italic">
+            Ticketing
+          </.link>
+        </div>
+
+        <div class="flex-none gap-2">
+          <%= if @current_scope do %>
+            <div class="dropdown dropdown-end">
+              <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
+                <div class="avatar avatar-placeholder">
+                  <div class="bg-neutral text-neutral-content w-8 rounded-full">
+                    <span class="text-lg">
+                      {String.at(@current_scope.user.email, 0)
+                      |> String.capitalize()}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <ul
+                tabindex="0"
+                class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow border border-base-200"
+              >
+                <li class="menu-title text-xs opacity-50">{@current_scope.user.email}</li>
+                <li><.link navigate={~p"/users/settings"}>Settings</.link></li>
+                <li><.link href={~p"/users/log-out"} method="delete">Log out</.link></li>
+              </ul>
+            </div>
+          <% else %>
+            <ul class="menu menu-horizontal px-1 gap-2">
+              <li>
+                <.link navigate={~p"/users/register"} class="btn btn-outline btn-sm">
+                  Register
+                </.link>
+              </li>
+
+              <li>
+                <.link navigate={~p"/users/log-in"} class="btn btn-neutral btn-sm">
+                  Log in
+                </.link>
+              </li>
+            </ul>
+          <% end %>
+        </div>
+      </div>
+    </header>
+
     {@inner_content}
   </body>
 </html>
