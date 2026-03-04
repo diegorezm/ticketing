@@ -13,7 +13,13 @@
     "lint": "eslint",
     "format": "prettier --check .",
     "check": "prettier --write . && eslint --fix",
-    "deploy": "pnpm run build && wrangler deploy"
+    "deploy": "pnpm run build && wrangler deploy",
+    "cf-typegen": "wrangler types",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:migrate:prod": "wrangler d1 migrations apply DB",
+    "db:studio": "drizzle-kit studio",
+    "db:push:local": "drizzle-kit push --local"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.13.8",
@@ -31,6 +37,7 @@
     "better-auth": "^1.4.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.1",
     "lucide-react": "^0.561.0",
     "posthog-js": "^1.335.4",
     "react": "^19.2.0",
@@ -50,6 +57,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
+    "drizzle-kit": "^0.31.9",
     "jsdom": "^27.0.0",
     "prettier": "^3.5.3",
     "typescript": "^5.7.2",
