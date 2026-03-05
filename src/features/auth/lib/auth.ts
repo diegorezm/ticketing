@@ -1,4 +1,5 @@
 import { betterAuth } from 'better-auth'
+import { organization } from 'better-auth/plugins'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { env } from 'cloudflare:workers'
@@ -15,5 +16,5 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [tanstackStartCookies()],
+  plugins: [tanstackStartCookies(), organization()],
 })
