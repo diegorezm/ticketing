@@ -4,6 +4,7 @@ import { Sheet, SheetContent, SheetTrigger } from '#/components/ui/sheet'
 import { Separator } from '#/components/ui/separator'
 import { Link } from '@tanstack/react-router'
 import { Menu, Ticket } from 'lucide-react'
+import { UserButton } from '#/features/auth/ui/components/user-button'
 
 const links = [
   { label: 'Features', href: '#' },
@@ -39,7 +40,7 @@ export function Navbar() {
 
       {/* Desktop auth */}
       <div className="hidden md:block">
-        <BetterAuthHeader />
+        <UserButton />
       </div>
 
       {/* Mobile menu */}
@@ -66,7 +67,7 @@ export function Navbar() {
               ))}
             </ul>
             <Separator className="my-6" />
-            <BetterAuthHeader isMobile />
+            <UserButton />
           </SheetContent>
         </Sheet>
       </div>
