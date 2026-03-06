@@ -17,6 +17,16 @@ const config = defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+
+  optimizeDeps: {
+    exclude: [
+      '@tanstack/react-query-devtools',
+      '@tanstack/router-devtools',
+      '@tanstack/react-form-devtools',
+      '@tanstack/devtools',
+      '@tanstack/devtools-utils',
+    ],
+  },
 })
 
 export default config
