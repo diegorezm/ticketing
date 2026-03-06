@@ -1,10 +1,10 @@
-import BetterAuthHeader from '#/features/auth/ui/components/header-user'
 import { Button } from '#/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '#/components/ui/sheet'
 import { Separator } from '#/components/ui/separator'
 import { Link } from '@tanstack/react-router'
-import { Menu, Ticket } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { UserButton } from '#/features/auth/ui/components/user-button'
+import { AppLogo } from '#/components/logo'
 
 const links = [
   { label: 'Features', href: '#' },
@@ -16,24 +16,20 @@ export function Navbar() {
   return (
     <nav className="sticky top-0 z-50 border-b border-border bg-background px-6 md:px-10 py-4 flex items-center justify-between">
       {/* Logo */}
-      <Link
-        to="/"
-        className="flex items-center gap-2 text-primary font-semibold tracking-tight"
-      >
-        <Ticket size={18} />
-        <span>Ticketing</span>
+      <Link to="/">
+        <AppLogo short />
       </Link>
 
       {/* Desktop links */}
       <ul className="hidden md:flex gap-8 list-none font-mono text-sm text-muted-foreground">
         {links.map((link) => (
           <li key={link.label}>
-            <a
-              href={link.href}
+            <Link
+              to={link.href}
               className="hover:text-primary transition-colors"
             >
               {link.label}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
