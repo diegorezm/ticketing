@@ -17,6 +17,7 @@ import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PrivateOnboardingRouteImport } from './routes/_private/onboarding'
 import { Route as PrivateDashboardRouteImport } from './routes/_private/dashboard'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as PrivateDashboardPlaygroundBoardRouteImport } from './routes/_private/dashboard/playground/board'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -56,33 +57,42 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivateDashboardPlaygroundBoardRoute =
+  PrivateDashboardPlaygroundBoardRouteImport.update({
+    id: '/playground/board',
+    path: '/playground/board',
+    getParentRoute: () => PrivateDashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
-  '/dashboard': typeof PrivateDashboardRoute
+  '/dashboard': typeof PrivateDashboardRouteWithChildren
   '/onboarding': typeof PrivateOnboardingRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/playground/board': typeof PrivateDashboardPlaygroundBoardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
-  '/dashboard': typeof PrivateDashboardRoute
+  '/dashboard': typeof PrivateDashboardRouteWithChildren
   '/onboarding': typeof PrivateOnboardingRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/playground/board': typeof PrivateDashboardPlaygroundBoardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_private': typeof PrivateRouteWithChildren
   '/_public': typeof PublicRouteWithChildren
-  '/_private/dashboard': typeof PrivateDashboardRoute
+  '/_private/dashboard': typeof PrivateDashboardRouteWithChildren
   '/_private/onboarding': typeof PrivateOnboardingRoute
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
   '/_public/': typeof PublicIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_private/dashboard/playground/board': typeof PrivateDashboardPlaygroundBoardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -93,6 +103,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/api/auth/$'
+    | '/dashboard/playground/board'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -101,6 +112,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/api/auth/$'
+    | '/dashboard/playground/board'
   id:
     | '__root__'
     | '/_private'
@@ -111,6 +123,7 @@ export interface FileRouteTypes {
     | '/_public/register'
     | '/_public/'
     | '/api/auth/$'
+    | '/_private/dashboard/playground/board'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -177,16 +190,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_private/dashboard/playground/board': {
+      id: '/_private/dashboard/playground/board'
+      path: '/playground/board'
+      fullPath: '/dashboard/playground/board'
+      preLoaderRoute: typeof PrivateDashboardPlaygroundBoardRouteImport
+      parentRoute: typeof PrivateDashboardRoute
+    }
   }
 }
 
+interface PrivateDashboardRouteChildren {
+  PrivateDashboardPlaygroundBoardRoute: typeof PrivateDashboardPlaygroundBoardRoute
+}
+
+const PrivateDashboardRouteChildren: PrivateDashboardRouteChildren = {
+  PrivateDashboardPlaygroundBoardRoute: PrivateDashboardPlaygroundBoardRoute,
+}
+
+const PrivateDashboardRouteWithChildren =
+  PrivateDashboardRoute._addFileChildren(PrivateDashboardRouteChildren)
+
 interface PrivateRouteChildren {
-  PrivateDashboardRoute: typeof PrivateDashboardRoute
+  PrivateDashboardRoute: typeof PrivateDashboardRouteWithChildren
   PrivateOnboardingRoute: typeof PrivateOnboardingRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
-  PrivateDashboardRoute: PrivateDashboardRoute,
+  PrivateDashboardRoute: PrivateDashboardRouteWithChildren,
   PrivateOnboardingRoute: PrivateOnboardingRoute,
 }
 
