@@ -47,9 +47,13 @@ export function useJoinOrg() {
 
   return useMutation({
     mutationFn: async (data: JoinOrg) => {
-      return await authClient.organization.acceptInvitation({
+      const result = await authClient.organization.acceptInvitation({
         invitationId: data.code,
       })
+      if (result.error) {
+        throw new Error(result.error.message ?? 'Something went wrong.')
+      }
+      return result
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: orgKeys.all })

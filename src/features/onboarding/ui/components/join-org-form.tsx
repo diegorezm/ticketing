@@ -14,17 +14,32 @@ import {
 } from '#/components/ui/field'
 import { Input } from '#/components/ui/input'
 import { useJoinOrg } from '#/features/auth/hooks/use-organizations'
+import { authClient } from '#/features/auth/lib/auth-client'
 import { joinOrgSchema } from '#/features/auth/schemas/organization-schemas'
 import { useForm } from '@tanstack/react-form-start'
+import { useNavigate } from '@tanstack/react-router'
 
 export function JoinOrgForm() {
   const { mutateAsync, isPending, isError } = useJoinOrg()
+  const navigate = useNavigate()
 
   const form = useForm({
     defaultValues: { code: '' },
     validators: { onSubmit: joinOrgSchema },
     onSubmit: async ({ value }) => {
-      await mutateAsync(value)
+      const result = await mutateAsync(value)
+
+      if (isError) {
+        return
+      }
+
+      authClient.organization.setActive({
+        organizationId: result.data.member.organizationId,
+      })
+
+      navigate({
+        to: '/dashboard',
+      })
     },
   })
 

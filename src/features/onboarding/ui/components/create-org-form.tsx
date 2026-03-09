@@ -37,6 +37,10 @@ export function CreateOrgForm() {
     onSubmit: async ({ value }) => {
       await mutateAsync(value)
 
+      if (isError) {
+        return
+      }
+
       navigate({
         to: '/dashboard',
       })
