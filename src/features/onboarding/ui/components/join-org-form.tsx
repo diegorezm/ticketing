@@ -13,19 +13,18 @@ import {
   FieldLabel,
 } from '#/components/ui/field'
 import { Input } from '#/components/ui/input'
+import { useJoinOrg } from '#/features/auth/hooks/use-organizations'
+import { joinOrgSchema } from '#/features/auth/schemas/organization-schemas'
 import { useForm } from '@tanstack/react-form-start'
-import z from 'zod'
-
-const joinOrgSchema = z.object({
-  code: z.string().min(6).max(32),
-})
 
 export function JoinOrgForm() {
+  const { mutateAsync, isPending, isError } = useJoinOrg()
+
   const form = useForm({
     defaultValues: { code: '' },
     validators: { onSubmit: joinOrgSchema },
     onSubmit: async ({ value }) => {
-      console.log('join org', value)
+      await mutateAsync(value)
     },
   })
 
@@ -68,10 +67,20 @@ export function JoinOrgForm() {
               )}
             </form.Field>
 
-            <form.Subscribe selector={(s) => s.canSubmit}>
-              {(canSubmit) => (
-                <Button type="submit" className="w-full" disabled={!canSubmit}>
-                  Join organization
+            {isError && (
+              <FieldDescription className="text-destructive">
+                Invalid or expired invite code. Please try again.
+              </FieldDescription>
+            )}
+
+            <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting]}>
+              {([canSubmit, isSubmitting]) => (
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={!canSubmit || isSubmitting || isPending}
+                >
+                  {isPending ? 'Joining...' : 'Join organization'}
                 </Button>
               )}
             </form.Subscribe>
