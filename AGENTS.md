@@ -166,6 +166,8 @@ export const loginSchema = z.object({
 })
 
 // features/auth/ui/views/login-page.tsx
+import { useForm } from '@tanstack/react-form-start'
+
 export function LoginPage() {
   const form = useForm({
     defaultValues: { email: '', password: '' },
@@ -297,4 +299,3 @@ routes/
 - Do not create a form without a Zod validation schema — no exceptions.
 - Do not use dot-notation route files (e.g. `dashboard.members.tsx`) — always use `folder/index.tsx`.
 - Do not place authenticated routes under `__public/` or public routes under `__private/`.
-
