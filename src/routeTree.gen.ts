@@ -17,7 +17,9 @@ import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PrivateOnboardingRouteImport } from './routes/_private/onboarding'
 import { Route as PrivateDashboardRouteImport } from './routes/_private/dashboard'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as PrivateDashboardMembersIndexRouteImport } from './routes/_private/dashboard/members/index'
 import { Route as PrivateDashboardPlaygroundBoardRouteImport } from './routes/_private/dashboard/playground/board'
+import { Route as PrivateDashboardMembersInvitationsRouteImport } from './routes/_private/dashboard/members/invitations'
 
 const PublicRoute = PublicRouteImport.update({
   id: '/_public',
@@ -57,10 +59,22 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivateDashboardMembersIndexRoute =
+  PrivateDashboardMembersIndexRouteImport.update({
+    id: '/members/',
+    path: '/members/',
+    getParentRoute: () => PrivateDashboardRoute,
+  } as any)
 const PrivateDashboardPlaygroundBoardRoute =
   PrivateDashboardPlaygroundBoardRouteImport.update({
     id: '/playground/board',
     path: '/playground/board',
+    getParentRoute: () => PrivateDashboardRoute,
+  } as any)
+const PrivateDashboardMembersInvitationsRoute =
+  PrivateDashboardMembersInvitationsRouteImport.update({
+    id: '/members/invitations',
+    path: '/members/invitations',
     getParentRoute: () => PrivateDashboardRoute,
   } as any)
 
@@ -71,7 +85,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/members/invitations': typeof PrivateDashboardMembersInvitationsRoute
   '/dashboard/playground/board': typeof PrivateDashboardPlaygroundBoardRoute
+  '/dashboard/members/': typeof PrivateDashboardMembersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof PublicIndexRoute
@@ -80,7 +96,9 @@ export interface FileRoutesByTo {
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/dashboard/members/invitations': typeof PrivateDashboardMembersInvitationsRoute
   '/dashboard/playground/board': typeof PrivateDashboardPlaygroundBoardRoute
+  '/dashboard/members': typeof PrivateDashboardMembersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -92,7 +110,9 @@ export interface FileRoutesById {
   '/_public/register': typeof PublicRegisterRoute
   '/_public/': typeof PublicIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/_private/dashboard/members/invitations': typeof PrivateDashboardMembersInvitationsRoute
   '/_private/dashboard/playground/board': typeof PrivateDashboardPlaygroundBoardRoute
+  '/_private/dashboard/members/': typeof PrivateDashboardMembersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -103,7 +123,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/api/auth/$'
+    | '/dashboard/members/invitations'
     | '/dashboard/playground/board'
+    | '/dashboard/members/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -112,7 +134,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/api/auth/$'
+    | '/dashboard/members/invitations'
     | '/dashboard/playground/board'
+    | '/dashboard/members'
   id:
     | '__root__'
     | '/_private'
@@ -123,7 +147,9 @@ export interface FileRouteTypes {
     | '/_public/register'
     | '/_public/'
     | '/api/auth/$'
+    | '/_private/dashboard/members/invitations'
     | '/_private/dashboard/playground/board'
+    | '/_private/dashboard/members/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -190,6 +216,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_private/dashboard/members/': {
+      id: '/_private/dashboard/members/'
+      path: '/members'
+      fullPath: '/dashboard/members/'
+      preLoaderRoute: typeof PrivateDashboardMembersIndexRouteImport
+      parentRoute: typeof PrivateDashboardRoute
+    }
     '/_private/dashboard/playground/board': {
       id: '/_private/dashboard/playground/board'
       path: '/playground/board'
@@ -197,15 +230,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateDashboardPlaygroundBoardRouteImport
       parentRoute: typeof PrivateDashboardRoute
     }
+    '/_private/dashboard/members/invitations': {
+      id: '/_private/dashboard/members/invitations'
+      path: '/members/invitations'
+      fullPath: '/dashboard/members/invitations'
+      preLoaderRoute: typeof PrivateDashboardMembersInvitationsRouteImport
+      parentRoute: typeof PrivateDashboardRoute
+    }
   }
 }
 
 interface PrivateDashboardRouteChildren {
+  PrivateDashboardMembersInvitationsRoute: typeof PrivateDashboardMembersInvitationsRoute
   PrivateDashboardPlaygroundBoardRoute: typeof PrivateDashboardPlaygroundBoardRoute
+  PrivateDashboardMembersIndexRoute: typeof PrivateDashboardMembersIndexRoute
 }
 
 const PrivateDashboardRouteChildren: PrivateDashboardRouteChildren = {
+  PrivateDashboardMembersInvitationsRoute:
+    PrivateDashboardMembersInvitationsRoute,
   PrivateDashboardPlaygroundBoardRoute: PrivateDashboardPlaygroundBoardRoute,
+  PrivateDashboardMembersIndexRoute: PrivateDashboardMembersIndexRoute,
 }
 
 const PrivateDashboardRouteWithChildren =

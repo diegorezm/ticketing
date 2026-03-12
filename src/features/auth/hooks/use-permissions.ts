@@ -11,7 +11,7 @@ export const permissionKeys = {
 export function usePermission(input: PermissionInput) {
   return useQuery({
     queryKey: permissionKeys.check(input),
-    queryFn: () => hasPermissionFn({ data: input }),
+    queryFn: async () => await hasPermissionFn({ data: input }),
     staleTime: 1000 * 60 * 30,
     refetchInterval: 1000 * 60 * 30,
   })

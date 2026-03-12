@@ -55,18 +55,18 @@ export type NavItem = {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Inbox', icon: Inbox, to: '/inbox' },
-  { label: 'Board', icon: KanbanSquare, to: '/board' },
-  { label: 'Projects', icon: FolderKanban, to: '/projects' },
+  { label: 'Inbox', icon: Inbox, to: '/dashboard/inbox' },
+  { label: 'Board', icon: KanbanSquare, to: '/dashboard/board' },
+  { label: 'Projects', icon: FolderKanban, to: '/dashboard/projects' },
   {
     label: 'Members',
     icon: Users,
-    to: '/members',
+    to: '/dashboard/members',
     subitems: [
-      { label: 'All Members', to: '/members' },
+      { label: 'All Members', to: '/dashboard/members' },
       {
         label: 'Invitations',
-        to: '/members/invitations',
+        to: '/dashboard/members/invitations',
         icon: MailPlus,
         permission: { resource: 'organizations', actions: ['invite'] },
       },
