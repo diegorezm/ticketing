@@ -134,18 +134,16 @@ Rules:
 - To check organization membership, use `assert-membership.ts`.
 - Do not re-implement auth checks — always use the existing assert helpers.
 
+### Error Handling
+
+- Server functions must catch errors and return typed error responses — never let unhandled exceptions surface to the client.
+- Use discriminated unions for return types: `{ success: true; data: T } | { success: false; error: string }`.
+- Log errors server-side before returning sanitized messages to the client.
+- Never expose stack traces, internal IDs, or raw database error messages.
+
 ### File & Naming Conventions
 
 All files use **kebab-case**, no exceptions.
-
-| Thing                 | Convention | Example                       |
-| --------------------- | ---------- | ----------------------------- |
-| Server function files | kebab-case | `get-user-organizations.ts`   |
-| Component files       | kebab-case | `user-avatar.tsx`             |
-| Hook files            | kebab-case | `use-current-organization.ts` |
-| Schema files          | kebab-case | `organization-schema.ts`      |
-| View files            | kebab-case | `login-view.tsx`              |
-
 Note: file names are kebab-case, but the exported React component or function inside the file still uses the appropriate JS convention (PascalCase for components, camelCase for hooks and functions).
 
 ### Forms (TanStack Form)
@@ -289,6 +287,21 @@ routes/
 
 ---
 
+## Before Submitting Any Change
+
+Run through this checklist before considering a task complete:
+
+- [ ] No `any` types introduced anywhere.
+- [ ] Every new server function has an auth assertion at the top (if the route is private).
+- [ ] New routes are placed in `__private/` or `__public/` correctly.
+- [ ] All new files are kebab-case.
+- [ ] No business logic lives directly in a view or component.
+- [ ] No database calls made from client-side code.
+- [ ] Server function return types are explicit and serializable.
+- [ ] Error handling follows the discriminated union pattern.
+
+---
+
 ## What Not To Do
 
 - Do not put business logic directly in views or components.
@@ -299,3 +312,5 @@ routes/
 - Do not create a form without a Zod validation schema — no exceptions.
 - Do not use dot-notation route files (e.g. `dashboard.members.tsx`) — always use `folder/index.tsx`.
 - Do not place authenticated routes under `__public/` or public routes under `__private/`.
+- Do not swallow errors silently — always log and return a typed error response.
+- Do not use relative imports (`../../`) — always use absolute paths from the project root.

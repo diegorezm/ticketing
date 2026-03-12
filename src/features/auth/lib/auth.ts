@@ -3,6 +3,7 @@ import { organization } from 'better-auth/plugins'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { db } from '#/db'
+import { ac } from './permissions'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -13,5 +14,17 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [tanstackStartCookies(), organization()],
+  plugins: [
+    tanstackStartCookies(),
+    organization({
+      ac: ac,
+      dynamicAccessControl: {
+        enabled: true,
+        maximumRolesPerOrganization: async (organizationId) => {
+          console.log(`Roles for ${organizationId}`)
+          return 10
+        },
+      },
+    }),
+  ],
 })

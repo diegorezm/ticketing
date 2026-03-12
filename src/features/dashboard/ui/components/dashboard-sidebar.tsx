@@ -8,8 +8,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
   SidebarSeparator,
 } from '#/components/ui/sidebar'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '#/components/ui/collapsible'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,23 +26,52 @@ import {
 } from '#/components/ui/dropdown-menu'
 import { Link, useLocation } from '@tanstack/react-router'
 import {
-  Building2,
+  ChevronRight,
   ChevronUp,
-  ChevronsUpDown,
   FolderKanban,
   Inbox,
   KanbanSquare,
+  MailPlus,
   Plus,
   Settings,
   Users,
 } from 'lucide-react'
 import { OrganizationsDropdown } from './organizations-dropdown'
+import type { PermissionInput } from '#/features/auth/schemas/permissions-schema'
+import { DashboardSubitem } from './dashboard-sidebar-sub-item'
 
-const navItems = [
+export type SubItem = {
+  label: string
+  to: string
+  icon?: React.ElementType
+  permission?: PermissionInput
+}
+
+export type NavItem = {
+  label: string
+  icon: React.ElementType
+  to: string
+  subitems?: SubItem[]
+}
+
+const navItems: NavItem[] = [
   { label: 'Inbox', icon: Inbox, to: '/inbox' },
   { label: 'Board', icon: KanbanSquare, to: '/board' },
   { label: 'Projects', icon: FolderKanban, to: '/projects' },
-  { label: 'Members', icon: Users, to: '/members' },
+  {
+    label: 'Members',
+    icon: Users,
+    to: '/members',
+    subitems: [
+      { label: 'All Members', to: '/members' },
+      {
+        label: 'Invitations',
+        to: '/members/invitations',
+        icon: MailPlus,
+        permission: { resource: 'organizations', actions: ['invite'] },
+      },
+    ],
+  },
   { label: 'Settings', icon: Settings, to: '/settings' },
 ]
 
@@ -50,6 +85,7 @@ const currentProject = projects[0]
 
 export function DashboardSidebar() {
   const { pathname } = useLocation()
+
   return (
     <Sidebar collapsible="icon">
       {/* Org switcher */}
@@ -68,20 +104,62 @@ export function DashboardSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname.startsWith(item.to)}
-                    tooltip={item.label}
-                  >
-                    <Link to={item.to}>
-                      <item.icon size={16} />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navItems.map((item) => {
+                const isActive = pathname.startsWith(item.to)
+
+                if (item.subitems) {
+                  return (
+                    <Collapsible
+                      key={item.label}
+                      defaultOpen={isActive}
+                      asChild
+                      className="group/collapsible"
+                    >
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton
+                            isActive={isActive}
+                            tooltip={item.label}
+                          >
+                            <item.icon size={16} />
+                            <span>{item.label}</span>
+                            <ChevronRight
+                              size={14}
+                              className="ml-auto text-muted-foreground transition-transform group-data-[state=open]/collapsible:rotate-90"
+                            />
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <SidebarMenuSub>
+                            {item.subitems.map((sub) => (
+                              <DashboardSubitem
+                                key={sub.to}
+                                sub={sub}
+                                pathname={pathname}
+                              />
+                            ))}
+                          </SidebarMenuSub>
+                        </CollapsibleContent>
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  )
+                }
+
+                return (
+                  <SidebarMenuItem key={item.label}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.label}
+                    >
+                      <Link to={item.to}>
+                        <item.icon size={16} />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
