@@ -12,10 +12,13 @@ import { SidebarMenuButton } from '#/components/ui/sidebar'
 import { authClient } from '#/features/auth/lib/auth-client'
 import { Link } from '@tanstack/react-router'
 import { Building2, ChevronsUpDown, Plus } from 'lucide-react'
+import { useQueryClient } from '@tanstack/react-query'
+import { permissionKeys } from '#/features/auth/hooks/use-permissions'
 
 export function OrganizationsDropdown() {
   const { data: orgs, isPending, isError } = useGetCurrentUserOrganizations()
   const { data: session } = authClient.useSession()
+  const queryClient = useQueryClient()
 
   const activeOrgId = session?.session.activeOrganizationId
   const activeOrg = orgs?.find((org) => org.id === activeOrgId) ?? orgs?.[0]
@@ -85,9 +88,10 @@ export function OrganizationsDropdown() {
           <DropdownMenuItem
             key={org.id}
             className="gap-2"
-            onClick={() =>
+            onClick={() => {
               authClient.organization.setActive({ organizationId: org.id })
-            }
+              queryClient.invalidateQueries({ queryKey: permissionKeys.all })
+            }}
           >
             <div className="flex size-5 items-center justify-center rounded bg-primary/10 shrink-0">
               <Building2 size={11} className="text-primary" />
