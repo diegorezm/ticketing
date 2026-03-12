@@ -12,17 +12,30 @@ export const hasPermissionFn = createServerFn({
     const session = await assertSessionFn()
     const orgId = session.session.activeOrganizationId
 
-    if (!orgId) {
-      throw Error('Forbidden')
-    }
+    if (!orgId) return { success: false }
 
     const headers = getRequestHeaders()
 
-    return await auth.api.hasPermission({
-      body: {
-        permissions: { [data.resource]: data.actions },
-        organizationId: orgId,
-      },
-      headers,
-    })
+    const [hasAll, hasSpecific] = await Promise.all([
+      auth.api.hasPermission({
+        body: { permissions: { all: ['all'] }, organizationId: orgId },
+        headers,
+      }),
+      auth.api.hasPermission({
+        body: {
+          permissions: { [data.resource]: data.actions },
+          organizationId: orgId,
+        },
+        headers,
+      }),
+    ])
+
+    if (hasAll.success || hasSpecific.success) {
+      return { success: true, error: null }
+    }
+
+    return {
+      success: false,
+      error: `Missing permission: ${data.resource}:${data.actions.join(', ')}`,
+    }
   })

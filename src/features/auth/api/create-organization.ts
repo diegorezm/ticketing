@@ -8,11 +8,13 @@ export const createOrganizationFn = createServerFn()
   .handler(async ({ data }) => {
     const session = await assertSessionFn()
 
-    return await auth.api.createOrganization({
+    const org = await auth.api.createOrganization({
       body: {
         ...data,
         userId: session.user.id,
       },
       method: 'POST',
     })
+
+    return org
   })

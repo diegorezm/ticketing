@@ -1,6 +1,7 @@
 import { createAccessControl } from 'better-auth/plugins/access'
 
-const stmt = {
+export const stmt = {
+  all: ['all'],
   organizations: ['invite'],
   projects: ['create'],
 } as const
