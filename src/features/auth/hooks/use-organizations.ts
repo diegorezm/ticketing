@@ -60,3 +60,25 @@ export function useJoinOrg() {
     },
   })
 }
+
+export function useListOrganizationInvitations(orgId?: string) {
+  return useQuery({
+    queryKey: orgKeys.invites(orgId!),
+    enabled: !!orgId,
+    queryFn: async () => {
+      const { data, error } = await authClient.organization.listInvitations({
+        query: {
+          organizationId: orgId,
+        },
+      })
+
+      if (error) {
+        throw new Error(error.message)
+      }
+
+      return data
+    },
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 60 * 5,
+  })
+}

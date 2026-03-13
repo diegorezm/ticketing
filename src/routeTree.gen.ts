@@ -17,6 +17,7 @@ import { Route as PublicLoginRouteImport } from './routes/_public/login'
 import { Route as PrivateOnboardingRouteImport } from './routes/_private/onboarding'
 import { Route as PrivateDashboardRouteImport } from './routes/_private/dashboard'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as PublicInviteInvitationIdRouteImport } from './routes/_public/invite.$invitationId'
 import { Route as PrivateDashboardMembersIndexRouteImport } from './routes/_private/dashboard/members/index'
 import { Route as PrivateDashboardPlaygroundBoardRouteImport } from './routes/_private/dashboard/playground/board'
 import { Route as PrivateDashboardMembersInvitationsRouteImport } from './routes/_private/dashboard/members/invitations'
@@ -59,6 +60,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PublicInviteInvitationIdRoute =
+  PublicInviteInvitationIdRouteImport.update({
+    id: '/invite/$invitationId',
+    path: '/invite/$invitationId',
+    getParentRoute: () => PublicRoute,
+  } as any)
 const PrivateDashboardMembersIndexRoute =
   PrivateDashboardMembersIndexRouteImport.update({
     id: '/members/',
@@ -84,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/onboarding': typeof PrivateOnboardingRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
+  '/invite/$invitationId': typeof PublicInviteInvitationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/members/invitations': typeof PrivateDashboardMembersInvitationsRoute
   '/dashboard/playground/board': typeof PrivateDashboardPlaygroundBoardRoute
@@ -95,6 +103,7 @@ export interface FileRoutesByTo {
   '/onboarding': typeof PrivateOnboardingRoute
   '/login': typeof PublicLoginRoute
   '/register': typeof PublicRegisterRoute
+  '/invite/$invitationId': typeof PublicInviteInvitationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/members/invitations': typeof PrivateDashboardMembersInvitationsRoute
   '/dashboard/playground/board': typeof PrivateDashboardPlaygroundBoardRoute
@@ -109,6 +118,7 @@ export interface FileRoutesById {
   '/_public/login': typeof PublicLoginRoute
   '/_public/register': typeof PublicRegisterRoute
   '/_public/': typeof PublicIndexRoute
+  '/_public/invite/$invitationId': typeof PublicInviteInvitationIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_private/dashboard/members/invitations': typeof PrivateDashboardMembersInvitationsRoute
   '/_private/dashboard/playground/board': typeof PrivateDashboardPlaygroundBoardRoute
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/login'
     | '/register'
+    | '/invite/$invitationId'
     | '/api/auth/$'
     | '/dashboard/members/invitations'
     | '/dashboard/playground/board'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/login'
     | '/register'
+    | '/invite/$invitationId'
     | '/api/auth/$'
     | '/dashboard/members/invitations'
     | '/dashboard/playground/board'
@@ -146,6 +158,7 @@ export interface FileRouteTypes {
     | '/_public/login'
     | '/_public/register'
     | '/_public/'
+    | '/_public/invite/$invitationId'
     | '/api/auth/$'
     | '/_private/dashboard/members/invitations'
     | '/_private/dashboard/playground/board'
@@ -216,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_public/invite/$invitationId': {
+      id: '/_public/invite/$invitationId'
+      path: '/invite/$invitationId'
+      fullPath: '/invite/$invitationId'
+      preLoaderRoute: typeof PublicInviteInvitationIdRouteImport
+      parentRoute: typeof PublicRoute
+    }
     '/_private/dashboard/members/': {
       id: '/_private/dashboard/members/'
       path: '/members'
@@ -273,12 +293,14 @@ interface PublicRouteChildren {
   PublicLoginRoute: typeof PublicLoginRoute
   PublicRegisterRoute: typeof PublicRegisterRoute
   PublicIndexRoute: typeof PublicIndexRoute
+  PublicInviteInvitationIdRoute: typeof PublicInviteInvitationIdRoute
 }
 
 const PublicRouteChildren: PublicRouteChildren = {
   PublicLoginRoute: PublicLoginRoute,
   PublicRegisterRoute: PublicRegisterRoute,
   PublicIndexRoute: PublicIndexRoute,
+  PublicInviteInvitationIdRoute: PublicInviteInvitationIdRoute,
 }
 
 const PublicRouteWithChildren =
