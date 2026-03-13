@@ -1,266 +1,149 @@
-Welcome to your new TanStack Start app!
+# Ticketing App — Roadmap & TODO
 
-# Getting Started
+## ✅ Completed
 
-To run this application:
+### Infrastructure
 
-```bash
-pnpm install
-pnpm dev
-```
+- [x] TanStack Start + Vite setup
+- [x] Cloudflare Workers deployment config (wrangler.json with dev/test/production environments)
+- [x] D1 database setup with Drizzle ORM
+- [x] Environment variables strategy (`.env.*` files + wrangler secrets)
 
-# Building For Production
+### Auth
 
-To build this application for production:
+- [x] Better Auth setup with organization plugin
+- [x] Login page (email/password + GitHub/Google placeholders)
+- [x] Register page
+- [x] Session management (`assertSessionFn`, `getSession`)
+- [x] Onboarding flow (create or join org on first login)
+- [x] `_private` route guard (redirect to login if no session)
+- [x] Org check on `_private` (redirect to onboarding if no active org)
+- [x] `setActiveOrganization` server function
 
-```bash
-pnpm build
-```
+### Permissions
 
-## Testing
+- [x] Access control setup (`createAccessControl` with Better Auth)
+- [x] `hasPermissionFn` server function (checks active member role + specific permission)
+- [x] `usePermission` react-query hook (with 30min cache + background refresh)
+- [x] Permission-gated sidebar subitems (Invitations hidden from non-owners)
 
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+### UI / Design
 
-```bash
-pnpm test
-```
+- [x] Landing page (navbar, hero, features, CTA)
+- [x] Responsive navbar with mobile sheet
+- [x] Dashboard sidebar with org switcher, nav items, project switcher
+- [x] Collapsible sidebar subitems
+- [x] Dashboard navbar with breadcrumbs (desktop only) + sidebar trigger + user button
+- [x] `UserButton` component (avatar, dropdown with profile/settings/sign out)
+- [x] `OrganizationsDropdown` with skeleton loading states
+- [x] Board UI (Kanban columns, ticket cards, drag and drop via dnd-kit)
+- [x] Board filters bar (search, assignee, status, priority, labels)
+- [x] `PriorityBadge` and `AssigneeAvatars` components
+- [x] Breadcrumbs component (dynamic via `useMatches`)
 
-## Styling
+### Data / Hooks
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Uninstall the packages: `pnpm add @tailwindcss/vite tailwindcss --dev`
-
-## Linting & Formatting
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
-
-```bash
-pnpm lint
-pnpm format
-pnpm check
-```
-
-## Setting up Better Auth
-
-1. Generate and set the `BETTER_AUTH_SECRET` environment variable in your `.env.local`:
-
-   ```bash
-   pnpm dlx @better-auth/cli secret
-   ```
-
-2. Visit the [Better Auth documentation](https://www.better-auth.com) to unlock the full potential of authentication in your app.
-
-### Adding a Database (Optional)
-
-Better Auth can work in stateless mode, but to persist user data, add a database:
-
-```typescript
-// src/lib/auth.ts
-import { betterAuth } from 'better-auth'
-import { Pool } from 'pg'
-
-export const auth = betterAuth({
-  database: new Pool({
-    connectionString: process.env.DATABASE_URL,
-  }),
-  // ... rest of config
-})
-```
-
-Then run migrations:
-
-```bash
-pnpm dlx @better-auth/cli migrate
-```
-
-## Setting up PostHog
-
-1. Create a PostHog account at [posthog.com](https://posthog.com)
-2. Get your Project API Key from [Project Settings](https://app.posthog.com/project/settings)
-3. Set `VITE_POSTHOG_KEY` in your `.env.local`
-
-### Optional Configuration
-
-- `VITE_POSTHOG_HOST` - Set this if you're using PostHog Cloud EU (`https://eu.i.posthog.com`) or self-hosting
-
-## Shadcn
-
-Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
-
-```bash
-pnpm dlx shadcn@latest add button
-```
-
-## T3Env
-
-- You can use T3Env to add type safety to your environment variables.
-- Add Environment variables to the `src/env.mjs` file.
-- Use the environment variables in your code.
-
-### Usage
-
-```ts
-import { env } from '#/env'
-
-console.log(env.VITE_APP_TITLE)
-```
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from '@tanstack/react-router'
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+- [x] React Query setup
+- [x] Org hooks (`useOrganizations`, `useOrganization`, `useOrgMembers`, `useOrgInvites`)
+- [x] Org mutation hooks (`useCreateOrg`, `useLeaveOrg`, `useAcceptInvite`)
+- [x] `tryCatch` helper for error handling
+
+---
+
+## 🔄 In Progress / Needs Finishing
+
+### Auth
+
+- [ ] Wire up GitHub OAuth
+- [ ] Wire up Google OAuth
+
+### Board
+
+- [ ] Connect board to real data (replace mock data)
+- [ ] Dynamic ticket statuses per organization (CRUD for statuses)
+- [ ] Wire up drag-and-drop to update ticket status in DB
+
+---
+
+## 📋 TODO
+
+### Invitations
+
+- [ ] Invitation creation UI (form to invite by email)
+- [ ] Invitation server functions (`createInviteFn`, `listInvitesFn`, `revokeInviteFn`)
+- [ ] Invitation accept flow (via invite code on onboarding join tab)
+- [ ] Invitation email sending (Cloudflare Email or Resend)
+- [ ] `members/invitations` page UI
+
+### Roles & Permissions
+
+- [ ] Roles management page UI (list roles, create role, delete role)
+- [ ] Permission assignment UI (checkboxes per resource/action)
+- [ ] Server functions for role CRUD
+- [ ] Assign roles to members UI
+- [ ] Update `usePermission` to invalidate on role change
+
+### Board — Business Logic
+
+- [ ] Ticket CRUD server functions (`createTicketFn`, `updateTicketFn`, `deleteTicketFn`)
+- [ ] Status CRUD server functions (`createStatusFn`, `updateStatusFn`, `deleteStatusFn`, `reorderStatusFn`)
+- [ ] Board react-query hooks (`useBoard`, `useTicket`, `boardKeys`)
+- [ ] Ticket detail view / modal (edit title, assignees, priority, labels, due date, description)
+- [ ] Create ticket UI (modal or inline)
+- [ ] Labels CRUD
+
+### Real-time (Durable Objects)
+
+- [ ] Set up Cloudflare Durable Object for board rooms (`BoardRoom` DO)
+- [ ] WebSocket token issuance server function (short-lived, signed)
+- [ ] Worker gate for WebSocket connections (auth + membership check before forwarding to DO)
+- [ ] `useBoardSocket` hook (connect on board mount, disconnect on unmount, invalidate react-query on message)
+- [ ] DO broadcasts ticket/status updates to all connected viewers
+- [ ] Presence indicators (who is currently viewing the board) using DO ephemeral storage
+
+### Projects
+
+- [ ] Projects page UI (list of projects per org)
+- [ ] Create project form + server function
+- [ ] Each project gets its own board
+- [ ] Project switcher in sidebar wired to real data
+- [ ] Project-scoped routing (`/projects/:projectId/board`)
+- [ ] `useProjects` and `useProject` react-query hooks
+
+### Clients
+
+- [ ] Client user type (separate from org members)
+- [ ] Client invitation system (re-use Better Auth invite, special client role)
+- [ ] Client dashboard view (limited — only see their own issues)
+- [ ] Issue submission form (title, description, image uploads)
+- [ ] Issues list view for clients (track status of submitted issues)
+- [ ] Issues appear on a dedicated "Client Issues" board for operators
+- [ ] Operator assignment to a client issue
+- [ ] Chat feature between client and assigned operator
+  - [ ] Chat UI (message list + input)
+  - [ ] Image upload support in chat (Cloudflare R2)
+  - [ ] Real-time chat via Durable Objects (or reuse board DO pattern)
+- [ ] Client management page for operators (list clients, invite clients, remove clients)
+
+### General
+
+- [ ] `notFoundComponent` on `_private/dashboard` and other routes
+- [ ] Error boundaries
+- [ ] Members page UI (list org members, roles, remove member)
+- [ ] Settings page (org settings — name, slug, danger zone)
+- [ ] Profile page (update name, avatar, password)
+- [ ] Dark mode toggle wired up
+- [ ] Inbox page (notifications for ticket assignments, mentions, status changes)
+
+---
+
+## 🔮 Future / Nice to Have
+
+- [ ] Cloudflare R2 for image/file attachments on tickets
+- [ ] Email notifications (ticket assigned, status changed, new comment)
+- [ ] Activity log per ticket
+- [ ] Ticket comments/discussion thread
+- [ ] Board analytics (tickets per status, avg resolution time)
+- [ ] Mobile-friendly board view
+- [ ] Keyboard shortcuts
+- [ ] Public status page per org
