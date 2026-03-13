@@ -69,11 +69,10 @@
 
 ### Invitations
 
-- [ ] Invitation creation UI (form to invite by email)
-- [ ] Invitation server functions (`createInviteFn`, `listInvitesFn`, `revokeInviteFn`)
-- [ ] Invitation accept flow (via invite code on onboarding join tab)
-- [ ] Invitation email sending (Cloudflare Email or Resend)
-- [ ] `members/invitations` page UI
+- [x] Invitation creation UI (form to invite by email)
+- [x] Invitation accept flow (via invite code on onboarding join tab)
+- [x] Invitation email sending (Cloudflare Email or Resend)
+- [x] `members/invitations` page UI
 
 ### Roles & Permissions
 
